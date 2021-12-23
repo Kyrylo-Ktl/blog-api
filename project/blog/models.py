@@ -33,7 +33,7 @@ class Post(BaseModel):
     """Entity Model Post"""
 
     title = models.CharField(max_length=128, unique=True, help_text='Post title')
-    text = models.CharField(max_length=1024, unique=True, help_text='Post text')
+    text = models.CharField(max_length=1024, help_text='Post text')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -55,7 +55,7 @@ class Post(BaseModel):
 class Comment(BaseModel):
     """Entity Model Comment"""
 
-    text = models.CharField(max_length=512, unique=True, help_text='Comment text')
+    text = models.CharField(max_length=512, help_text='Comment text')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
