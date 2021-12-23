@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .models import Category, Comment, Post
+from .permissions import IsAdminUser, IsAuthorUser, ReadOnly
 from .serializers import CategorySerializer, CommentSerializer, PostSerializer
 
 
@@ -24,19 +25,30 @@ def api_root(request, format=None):
 
 
 class CategoryListView(ListCreateAPIView):
-    """View to display all categories and the ability to add a new one"""
+    """
+    View to display all categories.
+    Only admin can add a new one
+    """
     queryset = Category.get_all()
     serializer_class = CategorySerializer
+    permission_classes = [ReadOnly | IsAdminUser]
 
 
 class CategoryDetailView(RetrieveUpdateDestroyAPIView):
-    """Presentation to return category by ID, option to update category information or delete category"""
+    """
+    Presentation to return category by ID.
+    Only admin can update category information or delete category
+    """
     queryset = Category.get_all()
     serializer_class = CategorySerializer
+    permission_classes = [ReadOnly | IsAdminUser]
 
 
 class PostListView(ListCreateAPIView):
-    """View to display all posts and the ability to add a new one"""
+    """
+    View to display all posts.
+    Only an authorized user can add a new one
+    """
     queryset = Post.get_all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -46,14 +58,20 @@ class PostListView(ListCreateAPIView):
 
 
 class PostDetailView(RetrieveUpdateDestroyAPIView):
-    """Presentation to return post by ID, option to update post information or delete post"""
+    """
+    Presentation to return post by ID.
+    Only post author and admin have option to update post information or delete post
+    """
     queryset = Post.get_all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ReadOnly | IsAuthorUser | IsAdminUser]
 
 
 class CommentListView(ListCreateAPIView):
-    """View to display all comments and the ability to add a new one"""
+    """
+    View to display all comments.
+    Only authorized user can add a new one
+    """
     queryset = Comment.get_all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -63,7 +81,10 @@ class CommentListView(ListCreateAPIView):
 
 
 class CommentDetailView(RetrieveUpdateDestroyAPIView):
-    """Presentation to return comment by ID, option to update comment information or delete comment"""
+    """
+    Presentation to return comment by ID
+    Only comment author and admin have option to update comment information or delete comment
+    """
     queryset = Comment.get_all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ReadOnly | IsAuthorUser | IsAdminUser]
