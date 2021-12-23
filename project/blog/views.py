@@ -1,6 +1,8 @@
 """Module for describing model views"""
 
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -32,6 +34,9 @@ class CategoryListView(ListCreateAPIView):
     queryset = Category.get_all()
     serializer_class = CategorySerializer
     permission_classes = [ReadOnly | IsAdminUser]
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['title']
+    ordering_fields = ['title']
 
 
 class CategoryDetailView(RetrieveUpdateDestroyAPIView):
@@ -52,6 +57,10 @@ class PostListView(ListCreateAPIView):
     queryset = Post.get_all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['category__id', 'author__id']
+    search_fields = ['title', 'text']
+    ordering_fields = ['title', 'created_at', 'updated_at']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -75,6 +84,10 @@ class CommentListView(ListCreateAPIView):
     queryset = Comment.get_all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['post__id', 'author__id']
+    search_fields = ['text']
+    ordering_fields = ['created_at', 'updated_at']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
