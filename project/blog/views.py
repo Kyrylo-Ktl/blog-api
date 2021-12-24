@@ -35,8 +35,8 @@ class CategoryListView(ListCreateAPIView):
     serializer_class = CategorySerializer
     permission_classes = [ReadOnly | IsAdminUser]
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['title']
-    ordering_fields = ['title']
+    search_fields = ['name']
+    ordering_fields = ['name']
 
 
 class CategoryDetailView(RetrieveUpdateDestroyAPIView):
