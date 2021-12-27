@@ -25,8 +25,8 @@ from blog.serializers import CategorySerializer
 )
 @pytest.mark.django_db
 def test_get_category_list(client_fixture, request):
-    client = request.getfixturevalue(client_fixture)
-    response = client.get(CATEGORIES_URL)
+    client, _ = request.getfixturevalue(client_fixture)
+    response = client.get(path=CATEGORIES_URL)
 
     assert response.status_code == HTTP_200_OK
     assert isinstance(response.json().get('results'), list)
@@ -42,9 +42,9 @@ def test_get_category_list(client_fixture, request):
 )
 @pytest.mark.django_db
 def test_post_category(client_fixture, code, count, exists, request):
-    client = request.getfixturevalue(client_fixture)
+    client, _ = request.getfixturevalue(client_fixture)
     category_data = get_category_data()
-    response = client.post(CATEGORIES_URL, data=category_data, format='json')
+    response = client.post(path=CATEGORIES_URL, data=category_data, format='json')
 
     assert response.status_code == code
     assert Category.objects.count() == count
@@ -61,50 +61,12 @@ def test_post_category(client_fixture, code, count, exists, request):
 )
 @pytest.mark.django_db
 def test_post_category_with_existing_name(client_fixture, code, error, request, category):
-    client = request.getfixturevalue(client_fixture)
+    client, _ = request.getfixturevalue(client_fixture)
     category_data = get_category_data(name=category.name)
-    response = client.post(CATEGORIES_URL, data=category_data, format='json')
+    response = client.post(path=CATEGORIES_URL, data=category_data, format='json')
 
     assert response.status_code == code
     assert Category.objects.count() == 1
-    assert response.json().get('name') == error
-
-
-@pytest.mark.parametrize(
-    'client_fixture, code, error',
-    [
-        ('anonymous_client', HTTP_401_UNAUTHORIZED, None),
-        ('authorized_client', HTTP_403_FORBIDDEN, None),
-        ('admin_client', HTTP_400_BAD_REQUEST, ['Ensure this field has at least 4 characters.']),
-    ],
-)
-@pytest.mark.django_db
-def test_post_category_with_too_short_name(client_fixture, code, error, request):
-    client = request.getfixturevalue(client_fixture)
-    category_data = get_category_data(name=fake.word()[:3])
-    response = client.post(CATEGORIES_URL, data=category_data, format='json')
-
-    assert response.status_code == code
-    assert Category.objects.count() == 0
-    assert response.json().get('name') == error
-
-
-@pytest.mark.parametrize(
-    'client_fixture, code, error',
-    [
-        ('anonymous_client', HTTP_401_UNAUTHORIZED, None),
-        ('authorized_client', HTTP_403_FORBIDDEN, None),
-        ('admin_client', HTTP_400_BAD_REQUEST, ['Ensure this field has no more than 128 characters.']),
-    ],
-)
-@pytest.mark.django_db
-def test_post_category_with_too_long_name(client_fixture, code, error, request):
-    client = request.getfixturevalue(client_fixture)
-    category_data = get_category_data(name=fake.word()*65)
-    response = client.post(CATEGORIES_URL, data=category_data, format='json')
-
-    assert response.status_code == code
-    assert Category.objects.count() == 0
     assert response.json().get('name') == error
 
 
@@ -114,8 +76,8 @@ def test_post_category_with_too_long_name(client_fixture, code, error, request):
 )
 @pytest.mark.django_db
 def test_get_existing_category_details(client_fixture, request, category):
-    client = request.getfixturevalue(client_fixture)
-    response = client.get(urljoin(CATEGORIES_URL, f'{category.pk}/'))
+    client, _ = request.getfixturevalue(client_fixture)
+    response = client.get(path=urljoin(CATEGORIES_URL, f'{category.pk}/'))
 
     assert response.status_code == HTTP_200_OK
     assert response.json() == CategorySerializer(category).data
@@ -127,8 +89,8 @@ def test_get_existing_category_details(client_fixture, request, category):
 )
 @pytest.mark.django_db
 def test_get_non_existing_category_details(client_fixture, request):
-    client = request.getfixturevalue(client_fixture)
-    response = client.get(urljoin(CATEGORIES_URL, f'{randint(1, 100)}/'))
+    client, _ = request.getfixturevalue(client_fixture)
+    response = client.get(path=urljoin(CATEGORIES_URL, f'{randint(1, 100)}/'))
 
     assert response.status_code == HTTP_404_NOT_FOUND
 
@@ -143,8 +105,8 @@ def test_get_non_existing_category_details(client_fixture, request):
 )
 @pytest.mark.django_db
 def test_delete_existing_category(client_fixture, code, count, request, category):
-    client = request.getfixturevalue(client_fixture)
-    response = client.delete(urljoin(CATEGORIES_URL, f'{category.pk}/'))
+    client, _ = request.getfixturevalue(client_fixture)
+    response = client.delete(path=urljoin(CATEGORIES_URL, f'{category.pk}/'))
 
     assert response.status_code == code
     assert Category.objects.count() == count
@@ -160,8 +122,8 @@ def test_delete_existing_category(client_fixture, code, count, request, category
 )
 @pytest.mark.django_db
 def test_delete_non_existing_category(client_fixture, code, request):
-    client = request.getfixturevalue(client_fixture)
-    response = client.delete(urljoin(CATEGORIES_URL, f'{randint(1, 100)}/'))
+    client, _ = request.getfixturevalue(client_fixture)
+    response = client.delete(path=urljoin(CATEGORIES_URL, f'{randint(1, 100)}/'))
 
     assert response.status_code == code
 
@@ -176,9 +138,9 @@ def test_delete_non_existing_category(client_fixture, code, request):
 )
 @pytest.mark.django_db
 def test_put_existing_category(client_fixture, code, exists, request, category):
-    client = request.getfixturevalue(client_fixture)
+    client, _ = request.getfixturevalue(client_fixture)
     category_data = get_category_data(name=fake.word())
-    response = client.put(urljoin(CATEGORIES_URL, f'{category.pk}/'), data=category_data, format='json')
+    response = client.put(path=urljoin(CATEGORIES_URL, f'{category.pk}/'), data=category_data, format='json')
 
     assert response.status_code == code
     assert Category.objects.count() == 1
@@ -195,9 +157,9 @@ def test_put_existing_category(client_fixture, code, exists, request, category):
 )
 @pytest.mark.django_db
 def test_put_non_existing_category(client_fixture, code, request):
-    client = request.getfixturevalue(client_fixture)
+    client, _ = request.getfixturevalue(client_fixture)
     category_data = get_category_data(name=fake.word())
-    response = client.put(urljoin(CATEGORIES_URL, f'{randint(1, 100)}/'), data=category_data, format='json')
+    response = client.put(path=urljoin(CATEGORIES_URL, f'{randint(1, 100)}/'), data=category_data, format='json')
 
     assert response.status_code == code
     assert Category.objects.count() == 0
@@ -213,52 +175,14 @@ def test_put_non_existing_category(client_fixture, code, request):
 )
 @pytest.mark.django_db
 def test_put_category_with_existing_name(client_fixture, code, error, request, category):
-    client = request.getfixturevalue(client_fixture)
+    client, _ = request.getfixturevalue(client_fixture)
     category_data = get_category_data()
     other_category = Category.objects.create(**category_data)
 
     category_data['name'] = category.name
-    response = client.put(urljoin(CATEGORIES_URL, f'{other_category.pk}/'), data=category_data, format='json')
+    response = client.put(path=urljoin(CATEGORIES_URL, f'{other_category.pk}/'), data=category_data, format='json')
 
     assert response.status_code == code
     assert Category.objects.count() == 2
     assert Category.objects.get(**category_data) == category
-    assert response.json().get('name') == error
-
-
-@pytest.mark.parametrize(
-    'client_fixture, code, error',
-    [
-        ('anonymous_client', HTTP_401_UNAUTHORIZED, None),
-        ('authorized_client', HTTP_403_FORBIDDEN, None),
-        ('admin_client', HTTP_400_BAD_REQUEST, ['Ensure this field has at least 4 characters.']),
-    ],
-)
-@pytest.mark.django_db
-def test_put_category_with_too_short_name(client_fixture, code, error, request, category):
-    client = request.getfixturevalue(client_fixture)
-    category_data = get_category_data(name=fake.word()[:3])
-    response = client.put(urljoin(CATEGORIES_URL, f'{category.pk}/'), data=category_data, format='json')
-
-    assert response.status_code == code
-    assert Category.objects.count() == 1
-    assert response.json().get('name') == error
-
-
-@pytest.mark.parametrize(
-    'client_fixture, code, error',
-    [
-        ('anonymous_client', HTTP_401_UNAUTHORIZED, None),
-        ('authorized_client', HTTP_403_FORBIDDEN, None),
-        ('admin_client', HTTP_400_BAD_REQUEST, ['Ensure this field has no more than 128 characters.']),
-    ],
-)
-@pytest.mark.django_db
-def test_put_category_with_too_long_name(client_fixture, code, error, request, category):
-    client = request.getfixturevalue(client_fixture)
-    category_data = get_category_data(name=fake.word()*65)
-    response = client.put(urljoin(CATEGORIES_URL, f'{category.pk}/'), data=category_data, format='json')
-
-    assert response.status_code == code
-    assert Category.objects.count() == 1
     assert response.json().get('name') == error

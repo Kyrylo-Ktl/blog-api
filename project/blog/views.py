@@ -63,7 +63,7 @@ class PostListView(ListCreateAPIView):
     ordering_fields = ['title', 'created_at', 'updated_at']
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author_id=self.request.user.id)
 
 
 class PostDetailView(RetrieveUpdateDestroyAPIView):
@@ -90,7 +90,7 @@ class CommentListView(ListCreateAPIView):
     ordering_fields = ['created_at', 'updated_at']
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author_id=self.request.user.id)
 
 
 class CommentDetailView(RetrieveUpdateDestroyAPIView):

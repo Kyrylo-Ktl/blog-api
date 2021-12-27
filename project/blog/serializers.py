@@ -22,25 +22,27 @@ class PostSerializer(serializers.ModelSerializer):
                                   validators=[UniqueValidator(queryset=Post.get_all())])
     text = serializers.CharField(min_length=128, max_length=1024)
 
-    created_at = serializers.ReadOnlyField()
-    updated_at = serializers.ReadOnlyField()
+    created_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
 
-    category = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Category.get_all())
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(read_only=False,
+                                                     queryset=Category.objects.values_list('id', flat=True))
+    author_id = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Post
-        fields = ('id', 'title', 'text', 'created_at', 'updated_at', 'category', 'author',)
+        fields = ('id', 'title', 'text', 'created_at', 'updated_at', 'category_id', 'author_id',)
 
 
 class CommentSerializer(serializers.ModelSerializer):
     """Model serializer for Comment class"""
     text = serializers.CharField(min_length=8, max_length=512)
 
-    created_at = serializers.ReadOnlyField()
-    updated_at = serializers.ReadOnlyField()
+    created_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
 
-    post = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Post.get_all())
+    post = serializers.PrimaryKeyRelatedField(read_only=False,
+                                              queryset=Post.objects.values_list('id', flat=True))
     author = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:

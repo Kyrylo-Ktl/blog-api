@@ -26,19 +26,23 @@ def get_user_data(**kwargs):
 
 
 def get_post_data(**kwargs):
+    random_user = get_user_model().objects.order_by('?').first()
+    random_category = Category.objects.order_by('?').first()
     return {
         'title': kwargs.get('title', fake.text(100)),
         'text': kwargs.get('text', fake.text(1000)),
-        'author': kwargs.get('author', get_user_model().objects.order_by('?').first()),
-        'category': kwargs.get('category', Category.objects.order_by('?').first()),
+        'author_id': kwargs.get('author_id', random_user.id if random_user else None),
+        'category_id': kwargs.get('category_id', random_category.id if random_category else None),
     }
 
 
 def get_comment_data(**kwargs):
+    random_user = get_user_model().objects.order_by('?').first()
+    random_post = Post.objects.order_by('?').first()
     return {
         'text': kwargs.get('text', fake.text(500)),
-        'author': kwargs.get('author', get_user_model().objects.order_by('?').first()),
-        'post': kwargs.get('post', Post.objects.order_by('?').first()),
+        'author_id': kwargs.get('author_id', random_user.id if random_user else None),
+        'post_id': kwargs.get('post_id', random_post.id if random_post else None),
     }
 
 
