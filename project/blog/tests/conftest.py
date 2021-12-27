@@ -6,9 +6,14 @@ from django.contrib.auth.models import User
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from blog.models import Category, Post
+from blog.models import Category, Comment, Post
 from blog.tests.helpers import authorize_client
-from scripts.seed_db import get_category_data, get_post_data, get_user_data
+from scripts.seed_db import (
+    get_category_data,
+    get_comment_data,
+    get_post_data,
+    get_user_data,
+)
 
 fake = Faker()
 CATEGORIES_URL = reverse('categories-list')
@@ -83,3 +88,11 @@ def post(category, author):
         **get_post_data()
     )
     return post
+
+
+@pytest.fixture
+def comment(post, author):
+    comment = Comment.objects.create(
+        **get_comment_data()
+    )
+    return comment

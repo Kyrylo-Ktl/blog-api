@@ -41,10 +41,10 @@ class CommentSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
     updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
 
-    post = serializers.PrimaryKeyRelatedField(read_only=False,
+    post_id = serializers.PrimaryKeyRelatedField(read_only=False,
                                               queryset=Post.objects.values_list('id', flat=True))
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    author_id = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('id', 'text', 'created_at', 'updated_at', 'post', 'author',)
+        fields = ('id', 'text', 'created_at', 'updated_at', 'post_id', 'author_id',)
