@@ -35,8 +35,8 @@ class CategoryListView(ListCreateAPIView):
     serializer_class = CategorySerializer
     permission_classes = [ReadOnly | IsAdminUser]
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['title']
-    ordering_fields = ['title']
+    search_fields = ['name']
+    ordering_fields = ['name']
 
 
 class CategoryDetailView(RetrieveUpdateDestroyAPIView):
@@ -63,7 +63,7 @@ class PostListView(ListCreateAPIView):
     ordering_fields = ['title', 'created_at', 'updated_at']
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author_id=self.request.user.id)
 
 
 class PostDetailView(RetrieveUpdateDestroyAPIView):
@@ -90,7 +90,7 @@ class CommentListView(ListCreateAPIView):
     ordering_fields = ['created_at', 'updated_at']
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author_id=self.request.user.id)
 
 
 class CommentDetailView(RetrieveUpdateDestroyAPIView):
