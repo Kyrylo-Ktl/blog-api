@@ -18,7 +18,7 @@ def get_category_data(**kwargs):
 def get_user_data(**kwargs):
     return {
         'email': kwargs.get('email', fake.email()),
-        'username': kwargs.get('username', fake.word()),
+        'username': kwargs.get('username', fake.name().replace(' ', '_')),
         'first_name': kwargs.get('first_name', fake.first_name()),
         'last_name': kwargs.get('last_name', fake.last_name()),
         'password': kwargs.get('password', secrets.token_hex(nbytes=16)),

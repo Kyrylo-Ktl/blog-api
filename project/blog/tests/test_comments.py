@@ -100,7 +100,7 @@ def test_get_existing_comment_details(client_fixture, request, comment):
     ['anonymous_client', 'authorized_client', 'author_client', 'admin_client'],
 )
 @pytest.mark.django_db
-def test_get_non_existing_comment_details(client_fixture, request, comment):
+def test_get_non_existing_comment_details(client_fixture, request):
     client, _ = request.getfixturevalue(client_fixture)
     response = client.get(path=urljoin(COMMENTS_URL, f'{randint(1, 10)}/'))
 
