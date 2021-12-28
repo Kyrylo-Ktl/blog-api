@@ -20,6 +20,7 @@ CATEGORIES_URL = reverse('categories-list')
 POSTS_URL = reverse('posts-list')
 COMMENTS_URL = reverse('comments-list')
 PROFILE_URL = reverse('profile')
+SIGNUP_URL = reverse('signup')
 
 
 @pytest.fixture
