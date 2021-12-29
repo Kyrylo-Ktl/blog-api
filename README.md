@@ -95,6 +95,17 @@ docker-compose exec web python manage.py test
 Result:
 ![Tests](images/tests.png)
 
+You also can check tests coverage:
+
+```bash
+docker-compose exec web coverage report
+```
+
+Result:
+
+![Coverage](images/coverage.png)
+
+
 # REST API
 
 Next paragraphs will give you information about blog api usage

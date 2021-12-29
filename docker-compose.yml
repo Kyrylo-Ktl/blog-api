@@ -24,7 +24,7 @@ services:
     volumes:
       - .:/usr/src/app/
     ports:
-      - ${APP_PORT}:${APP_PORT}
+      - '${APP_PORT}:${APP_PORT}'
     env_file: .env
     depends_on:
       - db
