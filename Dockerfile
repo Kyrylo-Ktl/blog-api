@@ -2,14 +2,14 @@
 FROM python:3.8
 
 # set work directory
-WORKDIR /code/
+WORKDIR /usr/src/app/project
 
 # set system-wide environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Cpoy dependencies list
-COPY pyproject.toml poetry.lock /code/
+# Copy dependencies list
+COPY pyproject.toml poetry.lock /usr/src/app/
 
 # install dependencies
 RUN pip install --upgrade pip
@@ -18,4 +18,4 @@ RUN poetry config virtualenvs.create false
 RUN poetry install
 
 # copy project
-COPY project /code/
+COPY project /usr/src/app/

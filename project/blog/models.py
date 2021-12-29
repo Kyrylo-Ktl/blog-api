@@ -1,5 +1,6 @@
 """The module is used to describe database models"""
 
+from django.core.validators import MinLengthValidator
 from django.conf import settings
 from django.db import models
 
@@ -11,6 +12,10 @@ class BaseModel(models.Model):
     def get_all(cls) -> models.QuerySet:
         return cls.objects.all()
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     class Meta:
         abstract = True
 
@@ -18,7 +23,8 @@ class BaseModel(models.Model):
 class Category(BaseModel):
     """Entity Model Category"""
 
-    name = models.CharField(max_length=128, unique=True, help_text='Category name')
+    name = models.CharField(max_length=128, unique=True, help_text='Category name',
+                            validators=[MinLengthValidator(4)])
 
     def __str__(self):
         return self.name
@@ -32,8 +38,10 @@ class Category(BaseModel):
 class Post(BaseModel):
     """Entity Model Post"""
 
-    title = models.CharField(max_length=128, unique=True, help_text='Post title')
-    text = models.CharField(max_length=1024, help_text='Post text')
+    title = models.CharField(max_length=128, unique=True, help_text='Post title',
+                             validators=[MinLengthValidator(16)])
+    text = models.CharField(max_length=1024, help_text='Post text',
+                            validators=[MinLengthValidator(128)])
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -55,7 +63,8 @@ class Post(BaseModel):
 class Comment(BaseModel):
     """Entity Model Comment"""
 
-    text = models.CharField(max_length=512, help_text='Comment text')
+    text = models.CharField(max_length=512, help_text='Comment text',
+                            validators=[MinLengthValidator(8)])
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

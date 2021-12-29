@@ -139,7 +139,7 @@ def test_delete_non_existing_category(client_fixture, code, request):
 @pytest.mark.django_db
 def test_put_existing_category(client_fixture, code, exists, request, category):
     client, _ = request.getfixturevalue(client_fixture)
-    category_data = get_category_data(name=fake.word())
+    category_data = get_category_data()
     response = client.put(path=urljoin(CATEGORIES_URL, f'{category.pk}/'), data=category_data, format='json')
 
     assert response.status_code == code

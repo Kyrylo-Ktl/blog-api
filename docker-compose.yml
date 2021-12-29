@@ -12,6 +12,7 @@ services:
     container_name: ${APP_NAME}_db
     ports:
       - '5432:5432'
+    restart: always
     networks:
       - blog-api-net
 
@@ -19,7 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: python ./manage.py runserver ${APP_HOST}:${APP_PORT}
+    command: python manage.py runserver ${APP_HOST}:${APP_PORT}
     volumes:
       - .:/usr/src/app/
     ports:
@@ -28,6 +29,7 @@ services:
     depends_on:
       - db
     container_name: ${APP_NAME}
+    restart: always
     networks:
       - blog-api-net
 

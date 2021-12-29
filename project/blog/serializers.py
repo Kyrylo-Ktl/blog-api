@@ -42,7 +42,7 @@ class CommentSerializer(serializers.ModelSerializer):
     updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
 
     post_id = serializers.PrimaryKeyRelatedField(read_only=False,
-                                              queryset=Post.objects.values_list('id', flat=True))
+                                                 queryset=Post.objects.values_list('id', flat=True))
     author_id = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
