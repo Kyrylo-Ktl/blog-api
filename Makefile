@@ -19,7 +19,7 @@ logs-db:
 	docker logs --tail 50 --follow --timestamps ${APP_NAME}_db
 
 db-console:
-	docker-compose exec db psql --username=${POSTGRES_USER} --dbname=${POSTGRES_DB}
+	docker-compose exec db psql --username=${SQL_USER} --dbname=${SQL_DATABASE}
 
 seed-db:
 	docker-compose exec web python manage.py runscript seed_db

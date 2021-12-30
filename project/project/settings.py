@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
-from pathlib import Path
 from environs import Env
+from pathlib import Path
+from string import ascii_uppercase, digits, punctuation
 
 # Load environment
 env = Env()
@@ -86,27 +86,28 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': env('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
-        'USER': env('SQL_USER', 'user'),
-        'PASSWORD': env('SQL_PASSWORD', 'password'),
-        'HOST': env('SQL_HOST', 'localhost'),
-        'PORT': env('SQL_PORT', 5432),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#         'USER': 'user',
-#         'PASSWORD': 'password',
-#         'HOST': 'localhost',
-#         'PORT': 5432,
+#         'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
+#         'NAME': env('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
+#         'USER': env('SQL_USER', 'user'),
+#         'PASSWORD': env('SQL_PASSWORD', 'password'),
+#         'HOST': env('SQL_HOST', 'localhost'),
+#         'PORT': env('SQL_PORT', 5432),
 #     }
 # }
+
+AUTH_USER_MODEL = 'accounts.User'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': 5432,
+    }
+}
 
 
 # Password validation
@@ -117,13 +118,23 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8},
+    },
+    {
+        'NAME': 'accounts.validators.ContainSymbolsValidator',
+        'OPTIONS': {'min_digits': 1, 'symbols': ascii_uppercase},
+    },
+    {
+        'NAME': 'accounts.validators.ContainSymbolsValidator',
+        'OPTIONS': {'min_digits': 1, 'symbols': digits},
+    },
+    {
+        'NAME': 'accounts.validators.ContainSymbolsValidator',
+        'OPTIONS': {'min_digits': 1, 'symbols': punctuation},
     },
 ]
 

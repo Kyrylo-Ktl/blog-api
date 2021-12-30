@@ -7,10 +7,10 @@ from rest_framework.status import (
     HTTP_401_UNAUTHORIZED,
 )
 
+from accounts.models import User
+from accounts.serializers import UserSerializer
 from blog.tests.conftest import PROFILE_URL
 from scripts.seed_db import get_user_data
-from django.contrib.auth.models import User
-from accounts.serializers import UserSerializer
 
 
 @pytest.mark.django_db
@@ -61,15 +61,16 @@ def test_delete_profile(client_fixture, code, request):
     ['authorized_client', 'author_client', 'admin_client'],
 )
 @pytest.mark.django_db
-def test_put_profile(client_fixture, request):
+def test_put_profile(client_fixture, password, request):
     client, user = request.getfixturevalue(client_fixture)
     user_data = get_user_data()
     response = client.put(path=PROFILE_URL, data=user_data, type='json')
 
-    password = user_data.pop('password')
+    new_password = user_data.pop('password')
     user.refresh_from_db()
     assert response.status_code == HTTP_200_OK
     assert User.objects.get(**user_data) == user
+    assert not user.check_password(new_password)
     assert user.check_password(password)
 
 
