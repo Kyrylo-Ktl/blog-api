@@ -1,17 +1,17 @@
 import pytest
-import secrets
 from faker import Faker
 
-from django.contrib.auth.models import User
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
+from accounts.models import User
 from blog.models import Category, Comment, Post
 from blog.tests.helpers import authorize_client
 from scripts.seed_db import (
     get_category_data,
     get_comment_data,
     get_post_data,
+    get_random_password,
     get_user_data,
 )
 
@@ -25,7 +25,7 @@ SIGNUP_URL = reverse('signup')
 
 @pytest.fixture
 def password():
-    return secrets.token_hex(nbytes=16)
+    return get_random_password()
 
 
 @pytest.fixture

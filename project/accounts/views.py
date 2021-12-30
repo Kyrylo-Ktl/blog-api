@@ -1,10 +1,10 @@
 """Module for describing model views"""
 
-from django.contrib.auth.models import User
 from rest_framework.generics import CreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 
+from .models import User
 from .serializers import UserSerializer
 
 

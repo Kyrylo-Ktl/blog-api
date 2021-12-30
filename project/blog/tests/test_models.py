@@ -1,13 +1,15 @@
 import pytest
 
+from accounts.models import User
 from blog.models import Category, Comment, Post
 from django.core.exceptions import ValidationError
-from scripts.seed_db import get_post_data, get_comment_data, get_category_data
+from scripts.seed_db import get_post_data, get_comment_data, get_category_data, get_user_data
 
 
 def helper_test_create_model_with_invalid_data(invalid_data, model, error):
     with pytest.raises(ValidationError) as excinfo:
         model(**invalid_data).save()
+    print(str(excinfo.value))
     assert str(excinfo.value) == error
     assert model.objects.count() == 0
 
@@ -62,4 +64,48 @@ def test_create_comment_with_invalid_data(invalid_value, field, error, author, p
         invalid_data=comment_data,
         model=Comment,
         error=str({field: [error]}),
+    )
+
+
+@pytest.mark.parametrize(
+    'invalid_value, field, errors',
+    [
+        ('_', 'first_name', ['Ensure this value has at least 2 characters (it has 1).']),
+        ('_'*70, 'first_name', ['Ensure this value has at most 64 characters (it has 70).']),
+        ('_', 'last_name', ['Ensure this value has at least 2 characters (it has 1).']),
+        ('_'*70, 'last_name', ['Ensure this value has at most 64 characters (it has 70).']),
+        ('abcd', 'password', [
+            'This password is too common.',
+            'This password is too short. It must contain at least 8 characters.',
+            'The password must contain at least 1 symbols: ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            'The password must contain at least 1 symbols: 0123456789',
+            'The password must contain at least 1 symbols: !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~',
+        ]),
+        ('abcdefgh', 'password', [
+            'This password is too common.',
+            'The password must contain at least 1 symbols: ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            'The password must contain at least 1 symbols: 0123456789',
+            'The password must contain at least 1 symbols: !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~',
+        ]),
+        ('efghabcd', 'password', [
+            'The password must contain at least 1 symbols: ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            'The password must contain at least 1 symbols: 0123456789',
+            'The password must contain at least 1 symbols: !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~',
+        ]),
+        ('EFghabcd', 'password', [
+            'The password must contain at least 1 symbols: 0123456789',
+            'The password must contain at least 1 symbols: !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~',
+        ]),
+        ('EFghabcd12', 'password', [
+            'The password must contain at least 1 symbols: !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~',
+        ]),
+    ]
+)
+@pytest.mark.django_db
+def test_create_user_with_invalid_data(invalid_value, field, errors):
+    user_data = get_user_data(**{field: invalid_value})
+    helper_test_create_model_with_invalid_data(
+        invalid_data=user_data,
+        model=User,
+        error=str({field: errors}),
     )
