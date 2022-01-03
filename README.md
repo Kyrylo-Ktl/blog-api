@@ -139,18 +139,39 @@ POST /signup/
 {
     "email": "peter.parker@dailybugle.com",
     "username": "Spider-Man",
-    "password": "peter-parker"
+    "first_name": "Peter",
+    "last_name": "Parker",
+    "password": "friendly-neighbour"
 }
 ```
 
-And after authorization you can change your password or other personal data as follows:
+And after authorization you can change your personal information as follows:
 
 ```bash
-PATCH /profile/
+PUT /profile/
 {
-    "password": <new_password>,
+    "email": <new_email>,
+    "username": <new_username>,
     "first_name": <new_first_name>,
     "last_name": <new_last_name>
+}
+```
+
+You can change your password by requesting reset url:
+
+```bash
+POST /password-reset/request/
+{
+    "email": <your_email>
+}
+```
+
+After receiving the email, use the `POST` for the discovered link and provide the new password:
+
+```bash
+POST <received_lisk>
+{
+    "password": <your_new_password>
 }
 ```
 
