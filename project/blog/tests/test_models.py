@@ -1,15 +1,16 @@
 import pytest
 
+from django.core.exceptions import ValidationError
+
 from accounts.models import User
 from blog.models import Category, Comment, Post
-from django.core.exceptions import ValidationError
 from scripts.seed_db import get_post_data, get_comment_data, get_category_data, get_user_data
+from blog.tests.helpers import sending_reset_password_email
 
 
 def helper_test_create_model_with_invalid_data(invalid_data, model, error):
     with pytest.raises(ValidationError) as excinfo:
         model(**invalid_data).save()
-    print(str(excinfo.value))
     assert str(excinfo.value) == error
     assert model.objects.count() == 0
 
@@ -109,3 +110,9 @@ def test_create_user_with_invalid_data(invalid_value, field, errors):
         model=User,
         error=str({field: errors}),
     )
+
+
+@pytest.mark.django_db
+def test_send_email(user):
+    user.send_password_reset_mail()
+    sending_reset_password_email(user)

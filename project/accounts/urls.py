@@ -6,13 +6,21 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from . import views
+from .views import (
+    UserCreateView,
+    UserDetailView,
+    ResetPasswordEmailRequest,
+    ResetPasswordConfirm,
+)
 
 
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='tokens'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
 
-    path('signup/', views.UserCreateView.as_view(), name='signup'),
-    path('profile/', views.UserDetailView.as_view(), name='profile'),
+    path('signup/', UserCreateView.as_view(), name='signup'),
+    path('profile/', UserDetailView.as_view(), name='profile'),
+
+    path('password-reset/request/', ResetPasswordEmailRequest.as_view(), name='request-reset'),
+    path('password-reset/<uuid>/<token>/', ResetPasswordConfirm.as_view(), name='confirm-reset'),
 ]

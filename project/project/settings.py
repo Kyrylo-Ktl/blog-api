@@ -26,6 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
+APP_HOST = env('APP_HOST')
+APP_PORT = env('APP_PORT')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', True)
@@ -82,32 +84,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+# Custom user model
+
+AUTH_USER_MODEL = 'accounts.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
-#         'NAME': env('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
-#         'USER': env('SQL_USER', 'user'),
-#         'PASSWORD': env('SQL_PASSWORD', 'password'),
-#         'HOST': env('SQL_HOST', 'localhost'),
-#         'PORT': env('SQL_PORT', 5432),
-#     }
-# }
-
-AUTH_USER_MODEL = 'accounts.User'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'USER': 'user',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': env('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
+        'USER': env('SQL_USER', 'user'),
+        'PASSWORD': env('SQL_PASSWORD', 'password'),
+        'HOST': env('SQL_HOST', 'localhost'),
+        'PORT': env('SQL_PORT', 5432),
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'USER': 'user',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': 5432,
+#     }
+# }
 
 
 # Password validation
@@ -137,6 +142,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'OPTIONS': {'min_digits': 1, 'symbols': punctuation},
     },
 ]
+
+PASSWORD_RESET_TIMEOUT = 15 * 60  # 15 minutes, in seconds
 
 # Rest
 
@@ -174,3 +181,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Pytest runner for using `./manage.py test`
 
 TEST_RUNNER = 'project.runner.PytestTestRunner'
+
+# Email sending
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')

@@ -1,7 +1,7 @@
 """Module with functions for filling the database with random data"""
 
 from random import choice, shuffle
-from string import ascii_letters, digits, punctuation
+from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 
 from accounts.models import User
 from blog.models import Category, Comment, Post
@@ -10,9 +10,10 @@ from faker import Faker
 fake = Faker()
 
 
-def get_random_password(n_letters: int = 4, n_digits: int = 4, n_symbols: int = 4):
+def get_random_password(n_lowercase: int = 4, n_uppercase: int = 4, n_digits: int = 4, n_symbols: int = 4):
     random_symbols = \
-        [choice(ascii_letters) for _ in range(n_letters)] + \
+        [choice(ascii_lowercase) for _ in range(n_lowercase)] + \
+        [choice(ascii_uppercase) for _ in range(n_uppercase)] + \
         [choice(digits) for _ in range(n_digits)] + \
         [choice(punctuation) for _ in range(n_symbols)]
     shuffle(random_symbols)
