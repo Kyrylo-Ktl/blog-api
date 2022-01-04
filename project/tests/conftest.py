@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 from blog.models import Category, Comment, Post
-from blog.tests.helpers import authorize_client
+from tests.helpers import authorize_client
 from scripts.seed_db import (
     get_category_data,
     get_comment_data,

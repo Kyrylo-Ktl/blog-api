@@ -14,8 +14,8 @@ from rest_framework.status import (
 
 from blog.models import Comment
 from blog.serializers import CommentSerializer
-from blog.tests.conftest import fake, COMMENTS_URL
 from scripts.seed_db import get_comment_data
+from tests.conftest import fake, COMMENTS_URL
 
 
 @pytest.mark.parametrize(

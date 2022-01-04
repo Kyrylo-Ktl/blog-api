@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from accounts.models import User
 from blog.models import Category, Comment, Post
 from scripts.seed_db import get_post_data, get_comment_data, get_category_data, get_user_data
-from blog.tests.helpers import sending_reset_password_email
+from tests.helpers import sending_reset_password_email
 
 
 def helper_test_create_model_with_invalid_data(invalid_data, model, error):

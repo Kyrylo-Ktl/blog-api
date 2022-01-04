@@ -13,7 +13,7 @@ from rest_framework.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from blog.tests.conftest import CATEGORIES_URL, fake
+from tests.conftest import CATEGORIES_URL, fake
 from scripts.seed_db import get_category_data
 from blog.models import Category
 from blog.serializers import CategorySerializer

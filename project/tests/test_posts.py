@@ -14,8 +14,8 @@ from rest_framework.status import (
 
 from blog.models import Post
 from blog.serializers import PostSerializer
-from blog.tests.conftest import fake, POSTS_URL
 from scripts.seed_db import get_post_data
+from tests.conftest import fake, POSTS_URL
 
 
 @pytest.mark.parametrize(
