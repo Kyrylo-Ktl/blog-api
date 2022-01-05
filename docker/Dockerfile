@@ -2,7 +2,7 @@
 FROM python:3.8
 
 # set work directory
-WORKDIR /usr/src/app/project
+WORKDIR /usr/src/app
 
 # set system-wide environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -18,4 +18,4 @@ RUN pip install --upgrade pip && \
     poetry install
 
 # copy project
-COPY project /usr/src/app/
+COPY . /usr/src/app/
