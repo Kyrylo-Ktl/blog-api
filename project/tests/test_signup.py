@@ -3,8 +3,8 @@ import pytest
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from accounts.models import User
-from blog.tests.conftest import SIGNUP_URL
 from scripts.seed_db import get_user_data
+from tests.conftest import SIGNUP_URL
 
 
 @pytest.mark.django_db

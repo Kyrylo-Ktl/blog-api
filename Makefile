@@ -2,13 +2,13 @@ include .env
 export
 
 up:
-	docker-compose up -d --build
+	docker-compose -f docker/docker-compose.yml up -d --build
 down:
-	docker-compose down
+	docker-compose -f docker/docker-compose.yml down
 
 migrate:
-	docker-compose exec web python manage.py makemigrations
-	docker-compose exec web python manage.py migrate
+	docker-compose -f docker/docker-compose.yml exec web python manage.py makemigrations
+	docker-compose -f docker/docker-compose.yml exec web python manage.py migrate
 
 create-admin:
 	docker-compose exec web python manage.py createsuperuser
@@ -19,16 +19,16 @@ logs-db:
 	docker logs --tail 50 --follow --timestamps ${APP_NAME}_db
 
 db-console:
-	docker-compose exec db psql --username=${SQL_USER} --dbname=${SQL_DATABASE}
+	docker-compose -f docker/docker-compose.yml exec db psql --username=${SQL_USER} --dbname=${SQL_DATABASE}
 
 seed-db:
-	docker-compose exec web python manage.py runscript seed_db
+	docker-compose -f docker/docker-compose.yml exec web python manage.py runscript seed_db
 clear-db:
-	docker-compose exec web python manage.py flush
+	docker-compose -f docker/docker-compose.yml exec web python manage.py flush
 
 test:
-	docker-compose exec web python manage.py test
+	docker-compose -f docker/docker-compose.yml exec web python manage.py test
 coverage:
-	docker-compose exec web coverage report
+	docker-compose -f docker/docker-compose.yml exec web coverage report
 coverage-erase:
-	docker-compose exec web coverage erase
+	docker-compose -f docker/docker-compose.yml exec web coverage erase

@@ -9,8 +9,8 @@ from rest_framework.status import (
 
 from accounts.models import User
 from accounts.serializers import UserSerializer
-from blog.tests.conftest import PROFILE_URL
 from scripts.seed_db import get_user_data
+from tests.conftest import PROFILE_URL
 
 
 @pytest.mark.django_db
