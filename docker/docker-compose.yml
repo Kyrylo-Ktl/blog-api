@@ -18,14 +18,14 @@ services:
 
   web:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile
+      context: ../app
+      dockerfile: ../docker/Dockerfile
     command: python manage.py runserver ${APP_HOST}:${APP_PORT}
     volumes:
-      - ..:/usr/src/app
+      - ../app:/usr/src/app
     ports:
       - '${APP_PORT}:${APP_PORT}'
-    env_file: ../.env
+    env_file: ../app/.env
     depends_on:
       - db
     container_name: ${APP_NAME}
