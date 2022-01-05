@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
-from pathlib import Path
 from environs import Env
+from pathlib import Path
+from string import ascii_uppercase, digits, punctuation
 
 # Load environment
 env = Env()
@@ -26,6 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
+APP_HOST = env('APP_HOST')
+APP_PORT = env('APP_PORT')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', True)
@@ -41,7 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'django_extensions',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'django_filters',
+    'drf_yasg',
+
     'blog.apps.BlogConfig',
     'accounts.apps.AccountsConfig',
 ]
@@ -76,14 +84,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+# Custom user model
+
+AUTH_USER_MODEL = 'accounts.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': env('SQL_ENGINE', 'django.db.backends.sqlite3'),
+#         'NAME': env('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
+#         'USER': env('SQL_USER', 'user'),
+#         'PASSWORD': env('SQL_PASSWORD', 'password'),
+#         'HOST': env('SQL_HOST', 'localhost'),
+#         'PORT': env('SQL_PORT', 5432),
+#     }
+# }
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 
@@ -96,16 +123,38 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8},
+    },
+    {
+        'NAME': 'accounts.validators.ContainSymbolsValidator',
+        'OPTIONS': {'min_digits': 1, 'symbols': ascii_uppercase},
+    },
+    {
+        'NAME': 'accounts.validators.ContainSymbolsValidator',
+        'OPTIONS': {'min_digits': 1, 'symbols': digits},
+    },
+    {
+        'NAME': 'accounts.validators.ContainSymbolsValidator',
+        'OPTIONS': {'min_digits': 1, 'symbols': punctuation},
     },
 ]
 
+PASSWORD_RESET_TIMEOUT = 15 * 60  # 15 minutes, in seconds
+
+# Rest
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -128,3 +177,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Pytest runner for using `./manage.py test`
+
+TEST_RUNNER = 'project.runner.PytestTestRunner'
+
+# Email sending
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
