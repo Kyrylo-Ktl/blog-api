@@ -43,13 +43,13 @@ Make sure docker and docker-compose are installed, and docker service is running
 So just run next command in root directory:
 
 ```bash
-docker-compose up -d --build
+docker-compose -f docker/docker-compose.yml up -d --build
 ```
 
 Firstly you may check all running containers by:
 
 ```bash
-docker-compose ps
+docker-compose -f docker/docker-compose.yml ps
 ```
 
 As a result, you will see all docker containers running now:
@@ -77,19 +77,19 @@ The next step is create superuser.
 To do this and other manage.py commands we have to do this on next way:
 
 ```bash
-docker-compose exec web python manage.py createsuperuser
+docker-compose -f docker/docker-compose.yml exec web python manage.py createsuperuser
 ```
 
 To seed the database, we have a script that generates random posts, comments, categories and users:
 
 ```bash
-docker-compose exec web python manage.py runscript seed_db
+docker-compose -f docker/docker-compose.yml exec web python manage.py runscript seed_db
 ```
 
 ## Run the tests
 
 ```bash
-docker-compose exec web python manage.py test
+docker-compose -f docker/docker-compose.yml exec web python manage.py test
 ```
 
 Result:
@@ -98,7 +98,7 @@ Result:
 You also can check tests coverage:
 
 ```bash
-docker-compose exec web coverage report
+docker-compose -f docker/docker-compose.yml exec web coverage report
 ```
 
 Result:
