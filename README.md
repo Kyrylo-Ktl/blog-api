@@ -21,9 +21,8 @@ git clone https://github.com/Kyrylo-Ktl/blog-api
 Before starting, you need to create a `.env` environment file in the root of the project and fill in the fields:
 
 ```bash
-DJANGO_SETTINGS_MODULE=project.settings
+DJANGO_SETTINGS_MODULE=project.settings.production
 SECRET_KEY=<secret_key>
-DEBUG=True
 APP_NAME=blog
 APP_HOST=0.0.0.0
 APP_PORT=8000
