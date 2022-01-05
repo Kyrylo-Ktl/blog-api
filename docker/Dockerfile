@@ -12,10 +12,10 @@ ENV PYTHONUNBUFFERED 1
 COPY pyproject.toml poetry.lock /usr/src/app/
 
 # install dependencies
-RUN pip install --upgrade pip
-RUN pip install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install
+RUN pip install --upgrade pip && \
+    pip install poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install
 
 # copy project
 COPY project /usr/src/app/
