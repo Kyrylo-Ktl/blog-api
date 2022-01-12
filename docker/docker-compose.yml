@@ -25,7 +25,6 @@ services:
       - ../app:/usr/src/app
     ports:
       - '${APP_PORT}:${APP_PORT}'
-    env_file: ../app/.env
     depends_on:
       - db
     container_name: ${APP_NAME}
