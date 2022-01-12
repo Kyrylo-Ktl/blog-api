@@ -11,7 +11,7 @@ migrate:
 	docker-compose -f docker/docker-compose.yml exec web python manage.py migrate
 
 create-admin:
-	docker-compose exec web python manage.py createsuperuser
+	docker-compose -f docker/docker-compose.yml exec web python manage.py createsuperuser
 
 logs-web:
 	docker logs --tail 50 --follow --timestamps ${APP_NAME}

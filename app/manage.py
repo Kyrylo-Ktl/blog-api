@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-import os
 import sys
+from environs import Env
+
+# Load environment
+env = Env()
+env.read_env('.env')
 
 
 def main():

@@ -42,7 +42,7 @@ Make sure docker and docker-compose are installed, and docker service is running
 So just run next command in root directory:
 
 ```bash
-docker-compose -f docker/docker-compose.yml up -d --build
+docker-compose -f docker/docker-compose.yml --env-file app/.env up -d --build
 ```
 
 Firstly you may check all running containers by:
