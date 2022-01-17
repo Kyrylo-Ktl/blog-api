@@ -1,5 +1,11 @@
 [flake8]
 max-line-length = 120
 
-exclude = */migrations
+exclude =
+    .git,
+    __pycache__,
+    */migrations,
+    project,
+    tests
 import-order-style = google
+application_import_names = accounts, blog, project, scripts, snippets

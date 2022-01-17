@@ -7,10 +7,10 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (
+    ResetPasswordConfirm,
+    ResetPasswordEmailRequest,
     UserCreateView,
     UserDetailView,
-    ResetPasswordEmailRequest,
-    ResetPasswordConfirm,
 )
 
 

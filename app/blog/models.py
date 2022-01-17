@@ -1,7 +1,7 @@
 """The module is used to describe database models"""
 
-from django.core.validators import MinLengthValidator
 from django.conf import settings
+from django.core.validators import MinLengthValidator
 from django.db import models
 
 

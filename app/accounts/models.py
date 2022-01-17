@@ -1,12 +1,13 @@
 """The module is used to describe database models"""
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinLengthValidator
 from django.contrib.auth.password_validation import validate_password
-from django.utils.encoding import smart_bytes, smart_str, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.core.validators import MinLengthValidator
+from django.db import models
+from django.utils.encoding import DjangoUnicodeDecodeError, smart_bytes, smart_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
 from snippets.helpers import reverse_external
 
 

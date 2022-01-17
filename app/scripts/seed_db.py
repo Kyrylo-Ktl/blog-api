@@ -3,9 +3,10 @@
 from random import choice, shuffle
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 
+from faker import Faker
+
 from accounts.models import User
 from blog.models import Category, Comment, Post
-from faker import Faker
 
 fake = Faker()
 

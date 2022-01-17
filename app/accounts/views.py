@@ -14,9 +14,9 @@ from rest_framework.status import (
 
 from .models import User
 from .serializers import (
-    UserSerializer,
     ResetPasswordConfirmSerializer,
     ResetPasswordEmailRequestSerializer,
+    UserSerializer,
 )
 
 
