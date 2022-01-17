@@ -33,6 +33,11 @@ SQL_USER=<username>
 SQL_PASSWORD=<password>
 SQL_HOST=db
 SQL_PORT=5432
+
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=<your@email.adress>
+EMAIL_HOST_PASSWORD=<password>
 ```
 
 ## Run the app
@@ -48,7 +53,7 @@ docker-compose -f docker/docker-compose.yml --env-file app/.env up -d --build
 Firstly you may check all running containers by:
 
 ```bash
-docker-compose -f docker/docker-compose.yml ps
+docker-compose -f docker/docker-compose.yml --env-file app/.env ps
 ```
 
 As a result, you will see all docker containers running now:
@@ -72,23 +77,31 @@ docker logs --tail 50 --follow --timestamps blog_db
 Result:
 ![Database logs](images/db_logs.png)
 
+
+Before using db you have to make migrations:
+
+```bash
+docker-compose -f docker/docker-compose.yml --env-file app/.env exec web python manage.py makemigrations
+docker-compose -f docker/docker-compose.yml --env-file app/.env exec web python manage.py migrate
+```
+
 The next step is create superuser.
 To do this and other manage.py commands we have to do this on next way:
 
 ```bash
-docker-compose -f docker/docker-compose.yml exec web python manage.py createsuperuser
+docker-compose -f docker/docker-compose.yml --env-file app/.env exec web python manage.py createsuperuser
 ```
 
 To seed the database, we have a script that generates random posts, comments, categories and users:
 
 ```bash
-docker-compose -f docker/docker-compose.yml exec web python manage.py runscript seed_db
+docker-compose -f docker/docker-compose.yml --env-file app/.env exec web python manage.py runscript seed_db
 ```
 
 ## Run the tests
 
 ```bash
-docker-compose -f docker/docker-compose.yml exec web python manage.py test
+docker-compose -f docker/docker-compose.yml --env-file app/.env exec web python manage.py test
 ```
 
 Result:
@@ -97,7 +110,7 @@ Result:
 You also can check tests coverage:
 
 ```bash
-docker-compose -f docker/docker-compose.yml exec web coverage report
+docker-compose -f docker/docker-compose.yml --env-file app/.env exec web coverage report
 ```
 
 Result:
