@@ -16,13 +16,13 @@ from .serializers import CategorySerializer, CommentSerializer, PostSerializer
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'categories': reverse('categories-list', request=request, format=format),
-        'posts': reverse('posts-list', request=request, format=format),
-        'comments': reverse('comments-list', request=request, format=format),
         'signup': reverse('signup', request=request, format=format),
         'profile': reverse('profile', request=request, format=format),
         'token': reverse('tokens', request=request, format=format),
         'token_refresh': reverse('token-refresh', request=request, format=format),
+        'categories': reverse('categories-list', request=request, format=format),
+        'posts': reverse('posts-list', request=request, format=format),
+        'comments': reverse('comments-list', request=request, format=format),
     })
 
 

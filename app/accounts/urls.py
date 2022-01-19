@@ -22,9 +22,11 @@ urlpatterns = [
     path('token/', post_without_auth_schema(TokenObtainPairView.as_view()), name='tokens'),
     path('token/refresh/', post_without_auth_schema(TokenRefreshView.as_view()), name='token-refresh'),
 
-    path('signup/', post_without_auth_schema(UserCreateView.as_view()), name='signup'),
-    path('profile/', UserDetailView.as_view(), name='profile'),
+    path('users/', post_without_auth_schema(UserCreateView.as_view()), name='signup'),
+    path('users/me/', UserDetailView.as_view(), name='profile'),
 
-    path('password-reset/request/', post_without_auth_schema(ResetPasswordEmailRequest.as_view()), name='request-reset'),
-    path('password-reset/<uuid>/<token>/', get_and_post_without_auth_schema(ResetPasswordConfirm.as_view()), name='confirm-reset'),
+    path('users/password/reset/<uuid>/<token>/', get_and_post_without_auth_schema(ResetPasswordConfirm.as_view()),
+         name='confirm-reset'),
+    path('users/password/reset/', post_without_auth_schema(ResetPasswordEmailRequest.as_view()),
+         name='request-reset'),
 ]

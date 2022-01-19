@@ -147,7 +147,7 @@ All non-read-only actions you should use with your access token as a **Bearer To
 So if you are not registered, then you can do it as follows:
 
 ```bash
-POST /signup/
+POST /users/
 {
     "email": "peter.parker@dailybugle.com",
     "username": "Spider-Man",
@@ -160,7 +160,7 @@ POST /signup/
 And after authorization you can change your personal information as follows:
 
 ```bash
-PUT /profile/
+PUT /users/me/
 {
     "email": <new_email>,
     "username": <new_username>,
@@ -172,7 +172,7 @@ PUT /profile/
 You can change your password by requesting reset url:
 
 ```bash
-POST /password-reset/request/
+POST /users/password/reset/
 {
     "email": <your_email>
 }
@@ -181,7 +181,7 @@ POST /password-reset/request/
 After receiving the email, use the `POST` for the discovered link and provide the new password:
 
 ```bash
-POST <received_lisk>
+POST <received_link>
 {
     "password": <your_new_password>
 }
