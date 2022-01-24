@@ -24,7 +24,7 @@ db-console:
 seed-db:
 	docker-compose -f docker/docker-compose.yml exec web python manage.py runscript seed_db
 clear-db:
-	docker-compose -f docker/docker-compose.yml exec web python manage.py flush
+	docker-compose -f docker/docker-compose.yml exec web python manage.py flush --noinput
 
 test:
 	docker-compose -f docker/docker-compose.yml exec web python manage.py test

@@ -16,7 +16,8 @@ from .models import User
 from .serializers import (
     ResetPasswordConfirmSerializer,
     ResetPasswordEmailRequestSerializer,
-    UserSerializer,
+    UserCreateSerializer,
+    UserDetailsSerializer,
 )
 
 
@@ -26,7 +27,7 @@ class UserCreateView(CreateAPIView):
     """
     model = User
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
 
 
 class UserDetailView(RetrieveUpdateDestroyAPIView):
@@ -34,7 +35,7 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
     Profile view, displays information about the current user.
     Only for authorized users
     """
-    serializer_class = UserSerializer
+    serializer_class = UserDetailsSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
